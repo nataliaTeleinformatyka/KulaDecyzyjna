@@ -6,14 +6,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
-
-import java.util.List;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     static public SensorManager mSensorManager;
-    static List<Sensor> SensorList;
     static final public String SENSOR_TYPE = "sensorType";
 
     @Override
@@ -21,22 +17,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        SensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         setContentView(R.layout.activity_main);
-
-        final SensorFragment sensFrag = (SensorFragment) getSupportFragmentManager().findFragmentById(R.id.sensorList);
-        sensFrag.getListView().setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showSensor(parent,position);
-            }
-        });
+        if(mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY) != null) {
+            Toast.makeText(this, "Istnieje czujnik zblizeniowy", Toast.LENGTH_LONG).show();
+        } else {
+            Toast.makeText(this, "Nie istnieje czujnik zblizeniowy", Toast.LENGTH_LONG).show();
+        }
+        final SensorFragment sensFrag = (SensorFragment) getSupportFragmentManager().findFragmentById(R.id.sensors);
+        showSensor();
     }
 
-    private void showSensor(AdapterView<?> parent, int position) {
+    private void showSensor() {
         Intent sensIntent = new Intent(this,SensorActivity.class);
-        Sensor currentSensor = (Sensor) parent.getItemAtPosition(position);
-        sensIntent.putExtra(SENSOR_TYPE, currentSensor.getType());
+        int currentSensor =Sensor.TYPE_PROXIMITY;
+        sensIntent.putExtra(SENSOR_TYPE, currentSensor);
         startActivity(sensIntent);
     }
 }

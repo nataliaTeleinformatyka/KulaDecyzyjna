@@ -6,4 +6,6 @@
     <string name="my_sensors">sensors</string>
     <string name="sensor_values">sensor_values</string>
     <string name="sensor_name">sensor_name</string>
+    <string name="textInfo">Bring the object to the screen to get an answer</string>
+    <string name="textDecisionInfo">Description</string>
 </resources>
